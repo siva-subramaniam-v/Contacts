@@ -21,7 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintVertical_bias="0.5"
-            app:srcCompat="@drawable/ic_plus"
+            app:srcCompat="@drawable/ic_filled_plus"
             app:tint="@color/material_fab_icon_indigo"
             android:layout_marginBottom="60dp"
             android:layout_marginEnd="20dp"/>
