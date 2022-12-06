@@ -13,13 +13,17 @@
 
     <color name="material_photo_picker_background_blue">#01579B</color>
     <color name="material_photo_picker_icon_blue">#BBDEFB</color>
+    <color name="material_photo_picker_dialog_grey">#323337</color>
 
     <color name="material_grey_background">#212121</color>
 
     <color name="material_text_grey">#BDBDBD</color>
+    <color name="material_text_white">#E3E3E3</color>
+    <color name="material_text_blue">#A9C7F8</color>
 
     <color name="material_text_label_blue">#90CAF9</color> <!-- also for button light blue background -->
     <color name="material_button_text_color_blue">#0D47A1</color>
+
 
     <color name="transparent">#00F8F8FA</color>
 </resources>

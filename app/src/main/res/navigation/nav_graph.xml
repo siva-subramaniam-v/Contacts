@@ -2,20 +2,22 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/displayContactsFragment">
 
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.contacts.ui.fragments.HomeFragment"
-        android:label="HomeFragment" >
-        <action
-            android:id="@+id/action_homeFragment_to_newContactFragment"
-            app:destination="@id/newContactFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
     <fragment
         android:id="@+id/newContactFragment"
         android:name="com.example.contacts.ui.fragments.NewContactFragment"
         android:label="NewContactFragment" />
+    <fragment
+        android:id="@+id/displayContactsFragment"
+        android:name="com.example.contacts.ui.fragments.DisplayContactsFragment"
+        android:label="DisplayContactsFragment">
+        <action
+            android:id="@+id/action_displayContactsFragment_to_newContactFragment"
+            app:destination="@id/newContactFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 </navigation>

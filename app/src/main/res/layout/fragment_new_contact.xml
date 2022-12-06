@@ -41,15 +41,15 @@
                     android:id="@+id/save_button"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
+                    android:layout_marginEnd="20dp"
                     android:background="@drawable/capsule_button_background"
-                    android:text="Save"
                     android:fontFamily="@font/manrope_semibold"
                     android:inputType="textCapWords"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Save"
+                    android:textColor="@color/material_button_text_color_blue"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="20dp"
-                    android:textColor="@color/material_button_text_color_blue"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -58,11 +58,11 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:scrollbars="none">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -135,7 +135,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/first_name_et"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName|textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -150,10 +151,12 @@
                     app:layout_constraintStart_toEndOf="@id/gl_input_start"
                     app:layout_constraintTop_toBottomOf="@id/first_name_til">
 
+                    <!-- add attribute boxStoreColor -->
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/last_name_et"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName|textCapWords" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -182,7 +185,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/company_et"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapWords"
+                        android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- phone -->
@@ -275,16 +280,21 @@
                         android:id="@+id/date_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="date" />
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="date"
+                        android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/date_til"
                     android:layout_margin="50dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/date_til" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
