@@ -7,7 +7,6 @@
 
     </data>
 
-    <!-- add property: android:background="@color/material_grey_background"-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -18,7 +17,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -28,13 +27,35 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/material_grey_background"
                     android:minHeight="?attr/actionBarSize"
                     android:theme="?attr/actionBarTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:title="" />
+
+                <ImageView
+                    android:id="@+id/cancel_button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:src="@drawable/ic_baseline_close"
+                    android:layout_marginStart="10dp"/>
+
+                <TextView
+                    android:id="@+id/create_contact_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey_300"
+                    android:text="Create contact"
+                    android:fontFamily="@font/manrope_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cancel_button"
+                    android:textSize="20sp"
+                    android:layout_marginStart="20dp"/>
 
                 <!-- TODO: change to material button -->
                 <Button
@@ -46,7 +67,7 @@
                     android:fontFamily="@font/manrope_semibold"
                     android:inputType="textCapWords"
                     android:text="Save"
-                    android:textColor="@color/material_button_text_color_blue"
+                    android:textColor="@color/blue_900"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -57,13 +78,14 @@
         <!-- change scrollview height to 0dp -->
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
+            <!-- android:background="@color/material_grey_background" -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -128,6 +150,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:hint="First Name"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@drawable/ic_baseline_error"
+                    app:helperTextTextColor="@color/red"
                     app:layout_constraintEnd_toStartOf="@id/gl_input_end"
                     app:layout_constraintStart_toEndOf="@id/gl_input_start"
                     app:layout_constraintTop_toBottomOf="@id/add_photo_label">
@@ -208,6 +233,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:hint="Phone"
+                    app:helperTextTextColor="@color/red"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@drawable/ic_baseline_error"
                     app:layout_constraintEnd_toStartOf="@id/gl_input_end"
                     app:layout_constraintStart_toEndOf="@id/gl_input_start"
                     app:layout_constraintTop_toBottomOf="@id/company_til">
@@ -221,7 +249,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <!-- mail -->
+                <!-- email -->
 
                 <ImageView
                     android:id="@+id/email_icon"
@@ -239,12 +267,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:hint="Email"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@drawable/ic_baseline_error"
+
                     app:layout_constraintEnd_toStartOf="@id/gl_input_end"
                     app:layout_constraintStart_toEndOf="@id/gl_input_start"
                     app:layout_constraintTop_toBottomOf="@id/phone1_til">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mail_et"
+                        android:id="@+id/email_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />

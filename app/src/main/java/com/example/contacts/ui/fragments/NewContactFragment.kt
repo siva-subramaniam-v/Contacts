@@ -1,57 +1,106 @@
 package com.example.contacts.ui.fragments
 
-import android.Manifest
-import android.content.ContentProviderOperation
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.provider.ContactsContract.RawContacts
-import android.provider.ContactsContract.CommonDataKinds.StructuredName
-import android.provider.ContactsContract.CommonDataKinds.Phone
-import android.provider.ContactsContract.Data
-import android.provider.Settings
 import android.text.format.DateFormat
-import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import com.example.contacts.BuildConfig
+import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.fragment.findNavController
 import com.example.contacts.databinding.FragmentNewContactBinding
+import com.example.contacts.domain.Contact
+import com.example.contacts.other.Constants.IMAGE_REQUEST_KEY
+import com.example.contacts.other.Constants.URI_BUNDLE_KEY
 import com.example.contacts.ui.fragments.dialogs.PhotoPickerDialogFragment
+import com.example.contacts.util.insertContact
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class NewContactFragment : Fragment() {
     private lateinit var binding: FragmentNewContactBinding
+    private lateinit var imageUri: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentNewContactBinding.inflate(inflater)
+        setClickListeners()
 
-        binding.dateEt.setOnClickListener {
-            showDatePickerDialog()
-        }
-
-        binding.saveButton.setOnClickListener {
-            onClickRequestPermission()
-            //Toast.makeText(requireContext(), "Contact saved", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.profileImage.setOnClickListener{
-            PhotoPickerDialogFragment().show(
-                childFragmentManager, PhotoPickerDialogFragment.TAG
-            )
+        setFragmentResultListener(IMAGE_REQUEST_KEY) { requestKey, bundle ->
+            Toast.makeText(
+                requireContext(),
+                "Fragment Result callback executed",
+                Toast.LENGTH_SHORT
+            ).show()
+            bundle.getString(URI_BUNDLE_KEY)?.let { imageUri = it }
+            if (::imageUri.isInitialized) {
+                binding.profileImage.setImageURI(Uri.parse(imageUri))
+                Toast.makeText(requireContext(), "Image Uri: $imageUri", Toast.LENGTH_LONG).show()
+            }
         }
 
         return binding.root
+    }
+
+    private fun setClickListeners() {
+        binding.apply {
+            cancelButton.setOnClickListener { findNavController().navigateUp() }
+
+            saveButton.setOnClickListener {
+                if (validateInputs()) { addContact() }
+            }
+
+            profileImage.setOnClickListener {
+                PhotoPickerDialogFragment().show(
+                    parentFragmentManager, PhotoPickerDialogFragment.TAG
+                )
+            }
+
+            dateEt.setOnClickListener { showDatePickerDialog() }
+
+            // textInputEditText validations
+            firstNameEt.doOnTextChanged { text, _, _, _ ->
+                firstNameTil.helperText = if ("$text".isEmpty()) "Required*" else null
+                firstNameTil.error = if ("$text".isBlank()) "Invalid Name" else null
+            }
+
+            emailEt.doOnTextChanged { text, _, _, _ ->
+                emailTil.error = validEmail("$text")
+            }
+
+            phone1Et.doOnTextChanged { text, _, _, _ ->
+                phone1Til.error = validPhone("$text")
+                if ("$text".isNotBlank()) phone1Til.helperText = null
+            }
+        }
+    }
+
+    private fun validateInputs(): Boolean {
+        val nameNotBlank = "${binding.firstNameEt.text}".isNotBlank()
+        val phoneNotBlank = "${binding.phone1Et.text}".isNotBlank()
+        val phoneLengthValid = "${binding.phone1Et.text}".length == 10
+
+        if (! nameNotBlank) { binding.firstNameTil.helperText = "Required*" }
+        if (! phoneNotBlank) { binding.phone1Til.helperText = "Required*" }
+
+        return nameNotBlank && phoneNotBlank && phoneLengthValid
+    }
+
+    private fun validName(name: String): String? {
+        return if (name.isEmpty()) "Required*" else null
+    }
+
+    private fun validEmail(email: String): String? {
+        return if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) "Invalid Email Address" else null
+    }
+
+    private fun validPhone(phone: String): String? {
+        return if (phone.length != 10) "Must be 10 Digits" else null
     }
 
     private fun showDatePickerDialog() {
@@ -69,82 +118,15 @@ class NewContactFragment : Fragment() {
     }
 
     private fun addContact() {
-        val contentProviderOperations = arrayListOf<ContentProviderOperation>()
+        val firstName = binding.firstNameEt.text.toString().trim()
+        val lastName = binding.lastNameEt.text.toString().trim()
+        val phoneNumber = binding.phone1Et.text.toString().trim()
+        val email = binding.emailEt.text.toString().trim()
 
-        contentProviderOperations.add(
-            ContentProviderOperation.newInsert(
-                RawContacts.CONTENT_URI
-            )
-                .withValue(RawContacts.ACCOUNT_TYPE, null)
-                .withValue(RawContacts.ACCOUNT_NAME, null)
-                .build()
-        )
+        val newContact = Contact(firstName, lastName, imageUri, phoneNumber, email)
 
-        // Adding name
-        contentProviderOperations.add( ContentProviderOperation
-            .newInsert(Data.CONTENT_URI)
-            .withValueBackReference(Data.RAW_CONTACT_ID, 0)
-            .withValue(Data.MIMETYPE, StructuredName.CONTENT_ITEM_TYPE)
-            .withValue(StructuredName.DISPLAY_NAME, "${binding.firstNameEt.text} ${binding.lastNameEt.text}")
-            .build()
-        )
+        insertContact(requireContext(), newContact)
 
-        // Adding Number
-        contentProviderOperations.add( ContentProviderOperation
-            .newInsert(Data.CONTENT_URI)
-            .withValueBackReference(Data.RAW_CONTACT_ID, 0)
-            .withValue(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE)
-            .withValue(Phone.NUMBER, "${binding.phone1Et.text}")
-            .withValue(Phone.TYPE, Phone.TYPE_WORK)
-            .build()
-        )
-
-        try {
-            requireActivity().contentResolver.applyBatch(ContactsContract.AUTHORITY, contentProviderOperations)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-
-    // Permission handling
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            addContact()
-            Log.i("Permission: ", "Granted")
-        } else {
-            Snackbar.make(
-                binding.root,
-                "Contacts permission is required to save contacts to your phone",
-                Snackbar.LENGTH_INDEFINITE
-            ).setAction("OK") {
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
-                intent.data = uri
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-            }.show()
-            Log.i("Permission: ", "Denied")
-        }
-    }
-
-    private fun onClickRequestPermission() {
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.WRITE_CONTACTS
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                addContact()
-                Toast.makeText(requireContext(), "Contact saved successfully", Toast.LENGTH_SHORT).show()
-            }
-
-            else -> {
-                requestPermissionLauncher.launch(
-                    Manifest.permission.WRITE_CONTACTS
-                )
-            }
-        }
+        Toast.makeText(requireContext(), "Contact saved", Toast.LENGTH_LONG).show()
     }
 }

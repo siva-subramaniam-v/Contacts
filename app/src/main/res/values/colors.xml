@@ -7,6 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FD0303</color>
+    <color name="grey_800">#424242</color>
+    <color name="grey_900">#212121</color>
+    <color name="grey_300">#E0E0E0</color>
 
     <color name="material_fab_background_blue">#0D47A1</color> <!-- also for text color dark blue -->
     <color name="material_fab_icon_indigo">#C5CAE9</color>
@@ -15,14 +19,11 @@
     <color name="material_photo_picker_icon_blue">#BBDEFB</color>
     <color name="material_photo_picker_dialog_grey">#323337</color>
 
-    <color name="material_grey_background">#212121</color>
-
     <color name="material_text_grey">#BDBDBD</color>
-    <color name="material_text_white">#E3E3E3</color>
-    <color name="material_text_blue">#A9C7F8</color>
+    <color name="material_text_blue">#A8C8FB</color>
 
     <color name="material_text_label_blue">#90CAF9</color> <!-- also for button light blue background -->
-    <color name="material_button_text_color_blue">#0D47A1</color>
+    <color name="blue_900">#0D47A1</color>
 
 
     <color name="transparent">#00F8F8FA</color>

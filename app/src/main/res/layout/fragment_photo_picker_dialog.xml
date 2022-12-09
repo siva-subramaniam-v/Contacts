@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/manrope_medium"
             android:text="Add Photo"
-            android:textColor="@color/material_text_white"
+            android:textColor="@color/grey_300"
             android:textSize="24sp"
             app:layout_constraintStart_toEndOf="@id/gl_start"
             app:layout_constraintTop_toTopOf="parent" />
